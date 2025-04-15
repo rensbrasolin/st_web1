@@ -5,7 +5,7 @@ import pandas as pd
 st.set_page_config(layout="wide") # Fiz isso pra tabela não ficar pequena e com scroll horizontal.
 
 
-st.title("📂 Upload de Múltiplos Arquivos Excel")
+st.title("📂 Upload de Múltiplos Arquivos em Excel")
 
 
 arquivos = st.file_uploader("Envie seus arquivos Excel", type=["xlsx", "xls"], accept_multiple_files=True)
