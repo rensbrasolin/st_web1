@@ -1,16 +1,28 @@
 import streamlit as st
-import pandas as pd
+
 
 # Configurar o layout da página para ocupar toda a largura
 st.set_page_config(layout="wide") # Fiz isso pra tabela não ficar pequena e com scroll horizontal.
 
 
-st.title("📂 Upload de Múltiplos Arquivos em Excel")
+# Menu
+# Inicialmente terá uma página só devido a base ser carregado pelo usuario em tempo real.
+# Mas dequalquer forma vou deixar um modelo de multipaginss comentado
+menu = st.navigation(
+    {
+        '# Título do Menu': [st.Page('paginas/pagina.py', title='- Consolidação Carteira B3')],
 
+        # '# 1. Consolidação do Extrato de Movimentações B3': [
+        #     st.Page('paginas/movimentacoes/pg_mov_completo.py', title='- Extrato Completo (a+b)'),
+        #     st.Page('paginas/movimentacoes/pg_mov_financeiras.py', title='- Movimentações Financeiras (a)'),
+        #     st.Page('paginas/movimentacoes/pg_mov_eventos.py', title='- Outros Eventos (b)')
+        # ],
+        #
+        # '# 2. Consolidações': [
+        #     st.Page('paginas/consolidacoes/pg_consolidacao_carteira.py', title='- Posição Atual'),
+        #     st.Page('paginas/consolidacoes/pg_rem.py', title='- Remunerações')
+        # ],
+    }
+)
 
-arquivos = st.file_uploader("Envie seus arquivos Excel", type=["xlsx", "xls"], accept_multiple_files=True)
-if arquivos:
-    for arquivo in arquivos:
-        with st.expander(f"🔍 Visualizar: {arquivo.name}"):
-            df = pd.read_excel(arquivo, sheet_name=0)  # Apenas a primeira aba
-            st.dataframe(df, use_container_width=True)
+menu.run()
