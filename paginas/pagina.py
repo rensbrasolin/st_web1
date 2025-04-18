@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from funcoes.fx_exibicao_df import exibir_df_aggrid
 from funcoes.movimentacoes.fx_movimentacoes import (
     unificar_extratos_em_df,
     tratar_coluna_data,
@@ -44,5 +45,13 @@ if arquivos: # If para não aparecer um df vazio de início.
     # st.dataframe(df_movimentacoes)
 
     df_movimentacoes = aplicar_desdobro(df_movimentacoes)
+    # st.dataframe(df_movimentacoes)
+
+
     with st.expander("Extrato de Movimentações B3 Organizado"):
-        st.dataframe(df_movimentacoes)
+        exibir_df_aggrid(df_movimentacoes, altura=275)
+
+
+
+
+

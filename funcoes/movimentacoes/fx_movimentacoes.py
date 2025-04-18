@@ -117,5 +117,3 @@ def aplicar_desdobro(df_movimentacoes):
         df_movimentacoes.loc[mask, 'Quantidade'] *= 2
 
     return df_movimentacoes
-
-
