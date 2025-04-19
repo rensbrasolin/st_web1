@@ -1,6 +1,6 @@
 def exibir_df_aggrid(df, tema='streamlit', altura=400): # Tema 'streamlit' muda conforme tema da pagina light/dark.
-    from st_aggrid import AgGrid
-    from st_aggrid.grid_options_builder import GridOptionsBuilder
+    from st_aggrid import AgGrid, GridOptionsBuilder
+    # from st_aggrid.grid_options_builder import GridOptionsBuilder
 
 
     # Configurar a tabela para permitir filtros nas colunas
