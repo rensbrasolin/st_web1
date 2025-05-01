@@ -98,17 +98,15 @@ if arquivos: # If para não aparecer um df vazio de início
         )['Close']  # Escolhe coluna
         df_cotacao
 
-      # ------------------------------------------------------
-
-    import yfinance as yf  # cotação
-
+      # ------------------------------------------------------teste2
+    st.write('teste 2')
     lista_ativos = ['BBAS3.SA',]
-    data_api = '2025-04-28'
     df_cotacao2 = yf.download(
         lista_ativos,
-        start=data_api,
+        period = "1d",
         auto_adjust=False,
         progress=False,  # barra de progresso
+        threads=False,
     )['Close']  # Escolhe coluna
     df_cotacao2
 # antes:
