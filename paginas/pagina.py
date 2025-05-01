@@ -90,16 +90,31 @@ if arquivos: # If para não aparecer um df vazio de início
         lista_ativos = ['BBAS3.SA', 'TAEE11.SA', 'BRBI11.SA', 'CSMG3.SA', 'PETR4.SA', 'VALE3.SA', 'BBSE3.SA',
                         'ISAE4.SA', 'HASH11.SA', 'IVVB11.SA', 'MXRF11.SA', 'HGLG11.SA']
         data_api = '2025-04-28'
-        df_cotacao = yf.download(lista_ativos,
-                                 start=data_api,
-                                 auto_adjust=False)['Close']  # , progress=FalseSuprime a barra de progresso
+        df_cotacao = yf.download(
+            lista_ativos,
+            start=data_api,
+            auto_adjust=False, # Se for cruzar dados c/ div em separado, deixar auto_adjust=False é melhor, senão conta o div duas vezes.
+            progress=False, # barra de progresso
+        )['Close']  # Escolhe coluna
         df_cotacao
 
       # ------------------------------------------------------
 
+    import yfinance as yf  # cotação
+
+    lista_ativos = ['BBAS3.SA',]
+    data_api = '2025-04-28'
+    df_cotacao2 = yf.download(
+        lista_ativos,
+        start=data_api,
+        auto_adjust=False,
+        progress=False,  # barra de progresso
+    )['Close']  # Escolhe coluna
+    df_cotacao2
 # antes:
 # depois subir o codigo com data de 30/04 e testar cotação YF
 
+      # ------------------------------------------------------
 
 
 # -----------------------------
