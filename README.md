@@ -1,2 +1,3 @@
 # st_web1
-Primeiro projeto público com streamlit
+⚠️ Este projeto é de autoria de Renato Brasolin. É proibida a cópia ou redistribuição. 
+
