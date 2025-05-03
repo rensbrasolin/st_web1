@@ -1,3 +1,5 @@
+import time
+
 import streamlit as st
 from funcoes.movimentacoes.fx_trat_movimentacoes import (
     unificar_extratos_em_df,
@@ -83,43 +85,119 @@ if arquivos: # If para não aparecer um df vazio de início
                 calcular_remuneracoes(df_mov_filtrado)
 
 
-# ================================================================================================
-#     with st.expander("Teste de cotação YF", expanded=True):  # ExpTeste
-#         import yfinance as yf  # cotação
-#
-#         lista_ativos = ['BBAS3.SA', 'TAEE11.SA', 'BRBI11.SA', 'CSMG3.SA', 'PETR4.SA', 'VALE3.SA', 'BBSE3.SA',
-#                         'ISAE4.SA', 'HASH11.SA', 'IVVB11.SA', 'MXRF11.SA', 'HGLG11.SA']
-#         data_api = '2025-04-28'
-#
-#         df_cotacao = yf.download(
-#             lista_ativos,
-#             start=data_api,
-#             auto_adjust=False, # Se for cruzar dados c/ div em separado, deixar auto_adjust=False é melhor, senão conta o div duas vezes.
-#             progress=False, # barra de progresso
-#         )['Close']  # Escolhe coluna
-#         df_cotacao
 
-      # ------------------------------------------------------teste2
 
-    st.write('teste 2')
 
-    import yfinance as yf  # cotação
 
-    lista_ativos = ['BBAS3.SA',]
-    data_api = '2025-04-30'
 
-    df_cotacao2 = yf.download(
-        lista_ativos,
-        start=data_api,
-        auto_adjust=False,
-        progress=False,  # barra de progresso
-        threads=False,
-    )['Close']  # Escolhe coluna
-    df_cotacao2
-# antes:
-# depois subir o codigo com data de 30/04 e testar cotação YF
+# ===============================================================================================
 
-      # ------------------------------------------------------
+    # -----------------------------------------------------TESTES:-------------------------------------------
+    # Obtendo os valores únicos da coluna 'ATIVO' e convertendo em uma lista
+    lista_principal_tickers = df_movimentacoes['Ativo'].unique().tolist()
+
+    # ---------------------
+
+    with st.expander("Teste de cotação YF", expanded=True):  # ExpTeste
+        import yfinance as yf  # cotação
+
+        # Acrescentando ".SA" a cada elemento da lista e ordenando para que fique na sequência padrão.
+        lista_tickers_yf = [ativo + ".SA" for ativo in sorted(lista_principal_tickers)]
+
+        # lista_ativos = ['BBAS3.SA', 'TAEE11.SA', 'BRBI11.SA', 'CSMG3.SA', 'PETR4.SA', 'VALE3.SA', 'BBSE3.SA',
+        #                 'ISAE4.SA', 'HASH11.SA', 'IVVB11.SA', 'MXRF11.SA', 'HGLG11.SA']
+
+        data_api = '2025-05-02'
+
+        df_cotacao_yf = yf.download(
+            lista_tickers_yf,
+            start=data_api,
+            auto_adjust=False, # Se for cruzar dados c/ div em separado, deixar auto_adjust=False é melhor, senão conta o div duas vezes.
+            progress=False, # barra de progresso
+        )['Close']  # Escolhe coluna
+        df_cotacao_yf
+
+
+
+
+
+
+
+
+
+
+
+
+
+      # ------------------------------------------------------teste 2 tradingview com requests
+
+    with st.expander("Teste de cotação Trading View", expanded=True):  # ExpTeste2
+
+        import requests
+        import json
+        import pandas as pd
+        from time import sleep
+
+        url = "https://scanner.tradingview.com/brazil/scan"
+
+        headers = {
+            "User-Agent": "Mozilla/5.0",
+            "Content-Type": "application/json",
+            "Referer": "https://br.tradingview.com/"
+        }
+
+        lista_tickers_tv = ['BBAS3', 'TAEE11', 'BRBI11', 'CSMG3', 'PETR4', 'VALE3', 'BBSE3', 'ISAE4', 'HASH11', 'IVVB11', 'MXRF11', 'HGLG11', 'MXRF11', 'BTLG11', 'GARE11',
+                            'GGRC11', 'RECR11', 'CPTS11', 'HSLG11', 'XPLG11', 'XPML11', 'GTWR11', 'TAEE3', 'SAPR4', 'ITSA4']
+
+
+
+        # Lista para armazenar os dados de todos os tickers
+        dados = []
+
+        for ticker in lista_tickers_tv:
+            payload = {
+                "symbols": {
+                    "tickers": [f"BMFBOVESPA:{ticker}"],  # Pode colocar BBAS3, PETR4, etc
+                    "query": {"types": []}
+                },
+                "columns": ["close", "name"]  # Aqui consigo pegar mais dados, preenchendo o nome dele aqui conforme doc API
+            }
+
+            response = requests.post(url, headers=headers, data=json.dumps(payload))
+            data = response.json()
+
+            # Atribuindo os dados pegos a variáveis
+            resultados = data['data'][0]['d']
+            preco_atual = resultados[0]
+            # nome = resultados[1]
+
+            # Adicionando à lista de dados para o DataFrame
+            dados.append({
+                "Ticker": ticker,
+                "Preço": preco_atual
+                # "Nome": nome  # Caso queira incluir, é só descomentar
+            })
+
+            sleep(0.5)
+
+        # Criando o DataFrame final
+        df_resultados = pd.DataFrame(dados)
+        st.dataframe(df_resultados)
+
+    # ------------------------------------------------------
+
+
+
+
+
+
+# próximos passos:
+# a versão publica está só com teste 2 YF que deu errado
+
+# provavelmente consigo com fundamentus, mas lá não tem ETF´s
+# tenho que pensar melhor como fazer isso.
+
+
 
 
 # -----------------------------
@@ -129,6 +207,6 @@ if arquivos: # If para não aparecer um df vazio de início
 # acho que dá
 
 
-# qdo for ensinar usuario a usar talvez por link para cada explicação ou tentar ?info?
+# Informar que dados estão seguros
 
 
