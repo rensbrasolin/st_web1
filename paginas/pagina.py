@@ -108,7 +108,7 @@ if arquivos: # If para não aparecer um df vazio de início
         df_cotacao_tvb3 = criar_df_cotacao_tvb3(df_mov_financeiras)
         st.dataframe(df_cotacao_tvb3)
 
-    with st.expander("Teste de Cotação 3: Status Invest", expanded=True):
+    with st.expander("Teste de Cotação 3.1: Status Invest", expanded=True):
         df_cotacao_statusinvest = criar_df_cotacao_statusinvest(df_mov_financeiras)
         st.dataframe(df_cotacao_statusinvest)
 
