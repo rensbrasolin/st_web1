@@ -1,4 +1,4 @@
-# Trading View é o site que a B3 usa
+# Trading View é o site que a B3 usa. É o único que funciona na nuvem por enquanto.
 
 import requests
 import json

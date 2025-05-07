@@ -11,6 +11,8 @@ def criar_df_mov_financeiras(df_movimentacoes):
         "Desdobro"
     ]
 
-    df_mov_financeiras = df_movimentacoes[~df_movimentacoes['Movimentação'].isin(lista_outros_eventos)]
+    df_mov_copia = df_movimentacoes.copy()
+
+    df_mov_financeiras = df_mov_copia[~df_mov_copia['Movimentação'].isin(lista_outros_eventos)]
 
     return df_mov_financeiras

@@ -20,8 +20,9 @@ from funcoes.consolidacoes.fx_df_mov_financeiras import criar_df_mov_financeiras
 
 from funcoes.consolidacoes.cotacao.fx_cotacao_yf import criar_df_cotacao_yf
 from funcoes.consolidacoes.cotacao.fx_cotacao_trading_view_b3 import criar_df_cotacao_tvb3
-# from funcoes.consolidacoes.cotacao.fx_cotacao_status_invest import obter_cotacoes_statusinvest
 from funcoes.consolidacoes.cotacao.fx_cotacao_status_invest import criar_df_cotacao_statusinvest
+from funcoes.consolidacoes.cotacao.fx_cotacao_investidor10 import criar_df_cotacao_investidor10
+
 
 st.title("📊 Invest View")
 st.write(" #### 🔎 Consolidação do Extrato de Movimentações da B3")
@@ -112,21 +113,21 @@ if arquivos: # If para não aparecer um df vazio de início
         df_cotacao_statusinvest = criar_df_cotacao_statusinvest(df_mov_financeiras)
         st.dataframe(df_cotacao_statusinvest)
 
+    with st.expander("Teste de Cotação 4: Investidor 10", expanded=True):
+        df_cotacao_investidor10 = criar_df_cotacao_investidor10(df_mov_financeiras)
+        st.dataframe(df_cotacao_investidor10)
+
 # ************************************************************************************************************
 # próximos passos:
 
-# pegar a cotação em Status Invest para ter uma 2a opção caso dê erro na 1a.
+# anotado no papel.  ver como se comporta inv10 online
 
 
 
 
 # -----------------------------
-# Quando for criar o df_mov_financeiras, talvez seja melhor usar a mesma fx que cria o df_mov, mas já com o nome df_mov_fin,
-# pois assim é um jeito de o df_mov_fin ser totalmente independente do df_mov. Se for mesmo fazer isso, depois por obs na fx:
-# informando que ela é usada como ponto de partida dos dfs mov e mov_fin. Mas antes tentar pegar o df_mov pronto mesmo pois
-# acho que dá
 
 
-# Informar que dados estão seguros
+
 
 

@@ -4,9 +4,8 @@
 #
 # # -------------------------------------------------------------------------------------------------------------------
 # Status Invest tem tabelas separadas para cada tipo de ativo, sendo assim cada tipo de ativo tem uma url diferente
-# Eu poderia colocar um if tornando a variável url dinâmica respondendo conforme a clasificação de tipo de ativo que fiz.
-# Porém se o ativo for classificado como 'Indefinido' daria erro. Então vou procurar todos os ativos em todas as urls
-
+# Todas funcionam no ambiente local mas dão erro na nuvem
+# A última funçao desse aqruivo é a melhor adaptada
 # # -------------------------------------------------------------------------------------------------------------------
 import requests
 from bs4 import BeautifulSoup
@@ -162,6 +161,6 @@ def criar_df_cotacao_statusinvest(df_mov_financeiras):
             "Preço": valor
         })
 
-        sleep(1)  # pausa para evitar bloqueio
+        sleep(2)  # pausa para evitar bloqueio
 
     return pd.DataFrame(dados)

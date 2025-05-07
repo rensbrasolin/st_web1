@@ -1,3 +1,6 @@
+# Dá erro na nuvem
+
+
 import yfinance as yf
 
 def criar_df_cotacao_yf(df_mov_financeiras):
