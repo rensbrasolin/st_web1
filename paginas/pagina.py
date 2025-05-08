@@ -109,24 +109,25 @@ if arquivos: # If para não aparecer um df vazio de início
         df_cotacao_tvb3 = criar_df_cotacao_tvb3(df_mov_financeiras)
         st.dataframe(df_cotacao_tvb3)
 
-    with st.expander("Teste de Cotação 3.1: Status Invest", expanded=True):
+    with st.expander("Teste de Cotação 3: Status Invest", expanded=True):
         df_cotacao_statusinvest = criar_df_cotacao_statusinvest(df_mov_financeiras)
         st.dataframe(df_cotacao_statusinvest)
 
-    with st.expander("Teste de Cotação 4: Investidor 10", expanded=True):
+    with st.expander("Teste de Cotação 4.1: Investidor 10", expanded=True):
         df_cotacao_investidor10 = criar_df_cotacao_investidor10(df_mov_financeiras)
         st.dataframe(df_cotacao_investidor10)
+
 
 # ************************************************************************************************************
 # próximos passos:
 
-# anotado no papel.  ver como se comporta inv10 online
+# anotado no papel.
+# ver como se comporta inv10 online. no 1o teste funcionou, então vale a pena tentar fiis e etfs separados.
 
 
 
 
 # -----------------------------
-
 
 
 

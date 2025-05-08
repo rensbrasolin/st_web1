@@ -161,6 +161,6 @@ def criar_df_cotacao_statusinvest(df_mov_financeiras):
             "Preço": valor
         })
 
-        sleep(2)  # pausa para evitar bloqueio
+        sleep(1)  # pausa para evitar bloqueio
 
     return pd.DataFrame(dados)
