@@ -23,6 +23,7 @@ from funcoes.consolidacoes.cotacao.fx_cotacao_trading_view_b3 import criar_df_co
 from funcoes.consolidacoes.cotacao.fx_cotacao_status_invest import criar_df_cotacao_statusinvest
 from funcoes.consolidacoes.cotacao.fx_cotacao_investidor10 import criar_df_cotacao_investidor10
 from funcoes.consolidacoes.cotacao.fx_cotacao_infomoney import criar_df_cotacao_infomoney
+from funcoes.consolidacoes.cotacao.fx_cotacao_moneytimes import criar_df_cotacao_moneytimes
 
 
 st.title("📊 Invest View")
@@ -106,7 +107,7 @@ if arquivos: # If para não aparecer um df vazio de início
         df_cotacao_yf = criar_df_cotacao_yf(df_mov_financeiras)
         st.dataframe(df_cotacao_yf)
 
-    with st.expander("Teste de Cotação 2: Trading View B3", expanded=True):
+    with st.expander("Teste de Cotação 2: Trading View B3", expanded=True): # OK
         df_cotacao_tvb3 = criar_df_cotacao_tvb3(df_mov_financeiras)
         st.dataframe(df_cotacao_tvb3)
 
@@ -114,7 +115,7 @@ if arquivos: # If para não aparecer um df vazio de início
         df_cotacao_statusinvest = criar_df_cotacao_statusinvest(df_mov_financeiras)
         st.dataframe(df_cotacao_statusinvest)
 
-    with st.expander("Teste de Cotação 4: Investidor 10", expanded=True):
+    with st.expander("Teste de Cotação 4: Investidor 10", expanded=True): # OK
         df_cotacao_investidor10 = criar_df_cotacao_investidor10(df_mov_financeiras)
         st.dataframe(df_cotacao_investidor10)
 
@@ -122,6 +123,9 @@ if arquivos: # If para não aparecer um df vazio de início
         df_cotacao_infomoney = criar_df_cotacao_infomoney(df_mov_financeiras)
         st.dataframe(df_cotacao_infomoney)
 
+    with st.expander("Teste de Cotação 6: Money Times", expanded=True):
+        df_cotacao_moneytimes = criar_df_cotacao_moneytimes(df_mov_financeiras)
+        st.dataframe(df_cotacao_moneytimes)
 
 # ************************************************************************************************************
 # próximos passos:
@@ -132,6 +136,5 @@ if arquivos: # If para não aparecer um df vazio de início
 
 
 # -----------------------------
-
 
 

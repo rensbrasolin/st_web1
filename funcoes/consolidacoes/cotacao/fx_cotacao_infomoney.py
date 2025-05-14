@@ -1,6 +1,6 @@
 # Algumas poucas urls de tickers não são encontradas. Entre elas GARE11 e ISAE4 que tiveram troca de ticker recentemente.
 # Então acredito ser algum problema da base do próprio site.
-# Local funcionou
+# Funciona local e na nuvem.
 
 # ---------------------------------------------------------------------------------------------------------------------
 import requests

@@ -53,8 +53,5 @@ def criar_df_cotacao_tvb3(df_mov_financeiras):
 
         sleep(0.75) # Talvez usar 1.0 ****
 
-    # # Criando o DataFrame final
-    # df_cotacao_tradview = pd.DataFrame(dados)
-
     return pd.DataFrame(dados)
 
