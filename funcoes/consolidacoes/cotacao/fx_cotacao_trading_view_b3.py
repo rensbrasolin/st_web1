@@ -1,4 +1,4 @@
-# Trading View é o site que a B3 usa. É o único que funciona na nuvem por enquanto.
+# Trading View é o site que a B3 usa. Funciona local e na nuvem.
 
 import requests
 import json
@@ -38,7 +38,7 @@ def criar_df_cotacao_tvb3(df_mov_financeiras):
             # Atribuindo os dados pegos a variáveis
             resultados = data['data'][0]['d']
             preco_atual = resultados[0]
-            # nome = resultados[1]  # Se quiser usar depois
+            # nome = resultados[1] # Se quiser usar depois
         except (IndexError, KeyError, TypeError):
             # Se não encontrar o ativo ou algo der errado, preenche com None
             preco_atual = None

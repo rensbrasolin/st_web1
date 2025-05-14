@@ -22,6 +22,7 @@ from funcoes.consolidacoes.cotacao.fx_cotacao_yf import criar_df_cotacao_yf
 from funcoes.consolidacoes.cotacao.fx_cotacao_trading_view_b3 import criar_df_cotacao_tvb3
 from funcoes.consolidacoes.cotacao.fx_cotacao_status_invest import criar_df_cotacao_statusinvest
 from funcoes.consolidacoes.cotacao.fx_cotacao_investidor10 import criar_df_cotacao_investidor10
+from funcoes.consolidacoes.cotacao.fx_cotacao_infomoney import criar_df_cotacao_infomoney
 
 
 st.title("📊 Invest View")
@@ -113,22 +114,24 @@ if arquivos: # If para não aparecer um df vazio de início
         df_cotacao_statusinvest = criar_df_cotacao_statusinvest(df_mov_financeiras)
         st.dataframe(df_cotacao_statusinvest)
 
-    with st.expander("Teste de Cotação 4.1: Investidor 10", expanded=True):
+    with st.expander("Teste de Cotação 4: Investidor 10", expanded=True):
         df_cotacao_investidor10 = criar_df_cotacao_investidor10(df_mov_financeiras)
         st.dataframe(df_cotacao_investidor10)
+
+    with st.expander("Teste de Cotação 5: Info Money", expanded=True):
+        df_cotacao_infomoney = criar_df_cotacao_infomoney(df_mov_financeiras)
+        st.dataframe(df_cotacao_infomoney)
 
 
 # ************************************************************************************************************
 # próximos passos:
 
 # anotado no papel.
-# ver como se comporta inv10 online. no 1o teste funcionou, então vale a pena tentar fiis e etfs separados.
 
 
 
 
 # -----------------------------
-
 
 
 

@@ -1,4 +1,5 @@
-# Dá erro na nuvem
+# Sempre funcionou localmente. Assim que implementei na nuvem ela funcionou, mas depois de alguns dias testando,
+# começou a travar na nuvem e depois travou local também, tanto no projeto web quanto no local.
 
 
 import yfinance as yf
