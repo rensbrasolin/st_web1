@@ -16,18 +16,13 @@ from funcoes.movimentacoes.fx_exib_movimentacoes import (
     calcular_remuneracoes,
 )
 
-from funcoes.consolidacoes.fx_df_mov_financeiras import criar_df_mov_financeiras
+from funcoes.pos_atual.fx_df_mov_financeiras import criar_df_mov_financeiras
+from funcoes.pos_atual.fx_df_pos_atual import criar_df_pos_atual
 
-from funcoes.consolidacoes.cotacao.fx_cotacao_yf import criar_df_cotacao_yf
-from funcoes.consolidacoes.cotacao.fx_cotacao_trading_view_b3 import criar_df_cotacao_tvb3
-from funcoes.consolidacoes.cotacao.fx_cotacao_status_invest import criar_df_cotacao_statusinvest
-from funcoes.consolidacoes.cotacao.fx_cotacao_investidor10 import criar_df_cotacao_investidor10
-from funcoes.consolidacoes.cotacao.fx_cotacao_infomoney import criar_df_cotacao_infomoney
-from funcoes.consolidacoes.cotacao.fx_cotacao_moneytimes import criar_df_cotacao_moneytimes
 
 
 st.title("📊 Invest View")
-st.write(" #### 🔎 Consolidação do Extrato de Movimentações da B3")
+st.write(" #### 🔎 Análise do Extrato de Movimentações da B3")
 
 # --------------------------------------------------------------------------------- CARREGANDO ARQ E CRIANDO DF MOV - 1
 
@@ -98,41 +93,35 @@ if arquivos: # If para não aparecer um df vazio de início
     # st.write('Tabela de Movimentações Financeiras') # Comentar e manter apenas para manutenção
     # st.dataframe(df_mov_financeiras)
 
+# ------------------------------------------------------------------------------------------- CRIANDO DF_POS_ATUAL - 4
+
+    with st.expander("📈 Posição Atual", expanded=True):  # Comentar e manter apenas para manutenção
+        with st.container(border=True):
+            df_pos_atual = criar_df_pos_atual(df_mov_financeiras)
+            st.dataframe(df_pos_atual.round(2))
+
+
 
 
 # ==========================================================================================================================================================================
 
-    # -----------------------------------------------------TESTES:-------------------------------------------
-    with st.expander("Teste de Cotação 1: Yahoo Finance", expanded=True):
-        df_cotacao_yf = criar_df_cotacao_yf(df_mov_financeiras)
-        st.dataframe(df_cotacao_yf)
+    # -----------------------------------------------------TESTES:------------------------------------------
 
-    with st.expander("Teste de Cotação 2: Trading View B3", expanded=True): # OK
-        df_cotacao_tvb3 = criar_df_cotacao_tvb3(df_mov_financeiras)
-        st.dataframe(df_cotacao_tvb3)
 
-    with st.expander("Teste de Cotação 3: Status Invest", expanded=True):
-        df_cotacao_statusinvest = criar_df_cotacao_statusinvest(df_mov_financeiras)
-        st.dataframe(df_cotacao_statusinvest)
 
-    with st.expander("Teste de Cotação 4: Investidor 10", expanded=True): # OK
-        df_cotacao_investidor10 = criar_df_cotacao_investidor10(df_mov_financeiras)
-        st.dataframe(df_cotacao_investidor10)
 
-    with st.expander("Teste de Cotação 5: Info Money", expanded=True):
-        df_cotacao_infomoney = criar_df_cotacao_infomoney(df_mov_financeiras)
-        st.dataframe(df_cotacao_infomoney)
 
-    with st.expander("Teste de Cotação 6: Money Times", expanded=True):
-        df_cotacao_moneytimes = criar_df_cotacao_moneytimes(df_mov_financeiras)
-        st.dataframe(df_cotacao_moneytimes)
 
 # ************************************************************************************************************
 # próximos passos:
 
-# anotado no papel.
+# a questão da TIR: dificil
+# criar fx ja no arquivo mas ir exibindo df dela na pagina até ficar pronto.
+# O problema da TIr é com o total/indicador, não com a tabela. O cartão é criado dentro da p´ropria função, e isso não deixa filtrar por ativo.
+# Ir fazendo aos poucos para ir sentindo se vai dar muito rtrabalaho ou não.
+# Primeiro de tudo, fazer a tabela funcionar, depois ver o o total
 
-
+# Precisa ver a questão dos totais: médio
 
 
 # -----------------------------

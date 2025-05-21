@@ -19,8 +19,8 @@ menu = st.navigation(
         # ],
         #
         # '# 2. Consolidações': [
-        #     st.Page('paginas/consolidacoes/pg_consolidacao_carteira.py', title='- Posição Atual'),
-        #     st.Page('paginas/consolidacoes/pg_rem.py', title='- Remunerações')
+        #     st.Page('paginas/pos_atual/pg_consolidacao_carteira.py', title='- Posição Atual'),
+        #     st.Page('paginas/pos_atual/pg_rem.py', title='- Remunerações')
         # ],
     }
 )
