@@ -2,12 +2,13 @@
 # Trading View é o site que a B3 usa. Funciona local e na nuvem.
 # Uma fx cria um df com tiker-preço e outra inclui ela no df_pos_atual.
 
+import streamlit as st
 import requests
 import json
 import pandas as pd
 from time import sleep
 
-
+@st.cache_data
 def criar_df_cotacao_tvb3(df_mov_financeiras):
 
     # Obtendo os valores únicos da coluna 'ATIVO' e convertendo em uma lista

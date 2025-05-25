@@ -48,7 +48,7 @@ def calcular_compras(df_mov_filtrado):
 
     total_compras = df_mov_filtrado.loc[filtro, 'Valor da Operação'].sum()
 
-    st.metric('Compras', f"💸 R$ {total_compras:,.2f}"
+    st.metric('💸 Compras', f"R$ {total_compras:,.2f}"
               .replace(",", "X").replace(".", ",").replace("X", "."))
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -58,7 +58,7 @@ def calcular_vendas(df_mov_filtrado):
 
     total_vendas = df_mov_filtrado.loc[filtro, 'Valor da Operação'].sum() *-1 #*-1 pra não ficar (-)
 
-    st.metric('Vendas', f"💵 R$ {total_vendas:,.2f}"
+    st.metric('💵 Vendas', f"R$ {total_vendas:,.2f}"
               .replace(",", "X").replace(".", ",").replace("X", "."))
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -70,7 +70,7 @@ def calcular_remuneracoes(df_mov_filtrado):
 
     total_remuneracoes = df_mov_filtrado.loc[filtro, 'Valor da Operação'].sum()
 
-    st.metric('Remunerações', f"🪙 R$ {total_remuneracoes:,.2f}" # 💰
+    st.metric('🪙 Remunerações', f"R$ {total_remuneracoes:,.2f}" # 💰
               .replace(",", "X").replace(".", ",").replace("X", "."),
               help="""
               - Dividendo

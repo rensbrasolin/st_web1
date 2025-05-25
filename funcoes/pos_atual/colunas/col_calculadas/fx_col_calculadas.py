@@ -12,26 +12,39 @@ def criar_col_calculadas(df_pos_atual):
     # Preço Médio
     df_pos_atual['Preço Médio'] = df_pos_atual['Custo Médio'] / df_pos_atual['Qtd']
 
+
     # Patrimônio Atual
     df_pos_atual['Patrimônio Atual'] = df_pos_atual["Qtd"] * df_pos_atual["Preço"]
 
+
     # Variação %
-    df_pos_atual['Variação de Cota %'] = (( df_pos_atual['Preço'] / df_pos_atual['Preço Médio']) -1) * 100
+    df_pos_atual['Variação %'] = (( df_pos_atual['Preço'] / df_pos_atual['Preço Médio']) -1) * 100
+
 
     # Variação $
-    df_pos_atual['Variação de Cota $'] = (df_pos_atual['Patrimônio Atual'] - df_pos_atual['Custo Médio'])
+    df_pos_atual['Variação $'] = (df_pos_atual['Patrimônio Atual'] - df_pos_atual['Custo Médio'])
 
-    # Yield %
-    df_pos_atual['Yield %'] = ( df_pos_atual['Remunerações $'] / df_pos_atual['Custo Médio']) * 100
 
-    # Performance $ - Reflete a diferença entre aplicado e saldo atual, e não o saldo atual.
-    df_pos_atual['Performance $'] = df_pos_atual['Resultado de Vendas $'] + df_pos_atual['Remunerações $'] + df_pos_atual['Variação de Cota $']
+    # Yield on Cost % - Deixar um pouco e depois provavelmente excluir.
+    # Não será exibido, pois não faz sentido comparar todos os dividendos recebidos com o Custo Médio atual.
+    # A única medida que faz sentido comprar com o Custo Médio Atual é o Patrimônuo Atual, que muda junto com ele.
+    # Essa medida faz mais sentido ser calculada acadarecebimento dela, como faço na seção de remunerações
+    df_pos_atual['Yield on Cost %'] = ( df_pos_atual['Remunerações $'] / df_pos_atual['Custo Médio']) * 100
 
-    # Performance % - Dá no mesmo usar 'Variação $' ou 'Patimônio Atual'-1
-    df_pos_atual['Performance %'] = (
-            (df_pos_atual['Resultado de Vendas $'] + df_pos_atual['Remunerações $'] + df_pos_atual['Variação de Cota $'])
-            / df_pos_atual['Custo Médio'] * 100
-    )
+
+    # Performance $ - Não reflete o saldo atual, mas sim o retorno, a diferença.
+    df_pos_atual['Performance $'] = df_pos_atual['Resultado de Vendas $'] + df_pos_atual['Remunerações $'] + df_pos_atual['Variação $']
+
+
+    # Performance % - Deixar um pouco para ver se tem alternativas, se não, depois excluir.
+    # Não será exibido, pois não faz sentido comparar a Performance $ de todu um período com o Custo Médio atual.
+    # A única medida que faz sentido comprar com o Custo Médio Atual é o Patrimônuo Atual, que muda junto com ele.
+    # Imagina que o investidor liquidou toda a posição menos 1. Nesse caso o CM será igual ao PM, e não faria sentido
+    # comparar esse CM/PM com Remunerações $ e Resultado de Vendas de todu um período
+
+    # Daria no mesmo usar 'Variação $' ou 'Patimônio Atual'-1.
+    # Posições que foram zeradas terão valor vazio pois custo médio será 0
+    df_pos_atual['Performance %'] = df_pos_atual['Performance $']/ df_pos_atual['Custo Médio'] * 100
 
 
 
