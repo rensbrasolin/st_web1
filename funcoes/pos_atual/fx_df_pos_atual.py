@@ -1,6 +1,7 @@
 # A ideia é constituir o df_pos_atual aqui e só exibi-lo lá na pagina
 
 import streamlit as st
+from st_aggrid import AgGrid, GridOptionsBuilder, StAggridTheme
 
 from funcoes.pos_atual.colunas.col_consolidadas.fx_col_consolidadas_inicio import criar_df_pos_atual_col_consolidadas_inicio
 from funcoes.pos_atual.colunas.col_cotacao.fx_col_cotacao_tvb3 import criar_df_cotacao_tvb3
@@ -91,19 +92,83 @@ def criar_df_pos_atual(df_mov_financeiras):
 
 
     return df_pos_atual
+# ----------------------------------------------------------------------------------------------- Exibição df_pos_atual
+def exibir_df_pos_atual_aggrid(df_pos_atual):
+    # Construir opções do grid
+    gb = GridOptionsBuilder.from_dataframe(df_pos_atual)
+
+    # Configurar todas as colunas. Se for col%, acrescentar %.
+    for col in df_pos_atual.columns:
+        gb.configure_column(
+            col,
+            filter=False,
+            sortable=True,
+            resizable=True,
+            enablePivot=False,
+            enableValue=False,
+            enableRowGroup=False,
+            valueFormatter="value.toLocaleString('pt-BR')"  # Arredondamento será feito c/ round na exibição
+        )
+        if col == 'Variação %' or col == 'TIR %':
+            gb.configure_column(col, valueFormatter="value != null ? value.toLocaleString('pt-BR') + ' %' : ''", )
+
+    # https: // staggrid - examples.streamlit.app / Themes https://www.ag-grid.com/theme-builder/
+    custom_theme = (
+        StAggridTheme(base="alpine").withParams(
+            chromeBackgroundColor="#1b4332", # BG Título - cinza 333533
+            foregroundColor="#ced4da", # Texto
+            # browserColorScheme="dark", # scrool
+            fontSize=14,
+            backgroundColor="#2d6a4f", # BG linhas - azul-escuro-cinza 2b2d42 - cinza 202020
+            # rowBorder=False,
+            columnBorder=False,
+            borderColor="#1b4332", # linhas e bordas
+            headerTextColor="#adb5bd", # Texto Título
+        ).withParts("iconSetAlpine")
+    )
+
+    # Exibir o DataFrame com AgGrid sem barra lateral
+    AgGrid(
+        df_pos_atual.round(2),
+        gridOptions=gb.build(),
+        enable_enterprise_modules=True,
+        fit_columns_on_grid_load=False,
+        height=480,
+        theme=custom_theme
+    )
 
 
-# ----------------------------------------------------------------------------------------------------------- Fx filtros
 
 
-def criar_filtro_tipo_df_pos_atual(df_pos_atual):
+
+# ------------------------------------------------------------------------------------------------ Fx filtro de qtde = 0
+
+def aplicar_filtro_posicao_zerada_df_pos_atual(df_pos_atual):
+    # Checkbox para exibir ou ocultar ativos com posição zerada
+    exibir_zerados = st.checkbox("Mostrar ativos zerados",
+                                 value=True,
+                                 help="Desmarque para esconder ativos que já saíram da carteira")
+
+    if not exibir_zerados:
+        df_pos_atual = df_pos_atual[df_pos_atual["Qtd"] != 0]
+
+    return df_pos_atual
+
+# ------------------------------------------------------------------------------------------------------- Fx filtro Tipo
+
+
+
+def aplicar_filtro_tipo_df_pos_atual(df_pos_atual):
     # Criar um "radio button" para filtrar por Tipo de Ativo
     tipo_ativo_opcoes = ["Todos"] + df_pos_atual["Tipo"].unique().tolist()
     tipo_ativo_selecionado = st.radio(
         "Selecione o Tipo de Ativo",
         options=tipo_ativo_opcoes,
         index=0,  # Valor padrão: "Todos"
+        horizontal=True,
     )
+
+
 
     # Atualizar as opções de ativos com base na seleção anterior, 'Tipo de Ativo'
 
@@ -288,55 +353,3 @@ def exibir_medidas_df_pos_atual(
 
 
 
-    # col1b, col2b, col3b, col4b = st.columns([0.8, 1, 1, 1])
-    #
-    # with col1b:
-    #     with st.container(border=True):
-    #         st.metric('Ativos', f'🧾 {qtd_ativos_total_df_pos_atual:,.0f}')
-    #
-    #     with st.container(border=True):
-    #         st.metric('Variação Percentual', f'📈 {variacao_percentual_total_df_pos_atual:,.2f}%')
-    #
-    #     # with st.container(border=True):
-    #     #     st.metric('Performance Percentual', f'🚀 {performance_percentual_total_df_pos_atual:,.2f}%')
-    #
-    # with col2b:
-    #     with st.container(border=True):
-    #         st.metric('Tipos de Ativos', f'🗂️ {qtd_tipos_total_df_pos_atual:,.0f}')
-    #
-    #     with st.container(border=True):
-    #         st.metric('Variação Absoluta', f'📈 R$ {variacao_absoluta_total_df_pos_atual:,.2f}'.replace(
-    #             ",", "X").replace(".", ",").replace("X", "."))
-    #
-    #     with st.container(border=True):
-    #         st.metric('Performance Absoluta', f'🚀 R$ {performance_absoluta_total_df_pos_atual:,.2f}'.replace(
-    #             ",", "X").replace(".", ",").replace("X", "."))
-    #
-    # with col3b:
-    #     with st.container(border=True):
-    #         st.metric('Custo Médio', f'💰 R$ {custo_medio_total_df_pos_atual:,.2f}'.replace(
-    #             ",", "X").replace(".", ",").replace("X", "."),
-    #                   help="""
-    #                     - Soma de todas as compras.
-    #                     - Quando há venda, se subtrai o valor de 'Preço Médio * Qtd Vendida'.
-    #                     """
-    #                   )
-    #
-    #     # with st.container(border=True):
-    #     #     st.metric('Yield on Cost', f'🪙 {yield_total_df_pos_atual:,.2f}%')
-    #
-    #     with st.container(border=True):
-    #         st.metric('Resultado de Vendas', f'💵 R$ {res_vendas_total_df_pos_atual:,.2f}'.replace(
-    #             ",", "X").replace(".", ",").replace("X", "."))
-    #
-    # with col4b:
-    #     with st.container(border=True):
-    #         st.metric('Patrimônio Atual', f'🏦 R$ {patrimonio_atual_total_df_pos_atual:,.2f}'.replace(
-    #             ",", "X").replace(".", ",").replace("X", "."))
-    #
-    #     with st.container(border=True):
-    #         st.metric('Remunerações', f'🪙 R$ {remuneracoes_total_df_pos_atual:,.2f}'.replace(
-    #             ",", "X").replace(".", ",").replace("X", "."))
-    #
-    #     with st.container(border=True):
-    #         st.metric('Taxa Interna de Retorno', f'💹 {tir_total_df_pos_atual:,.2f}%')  # 🧮📉

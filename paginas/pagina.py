@@ -1,5 +1,8 @@
+# from idlelib.configdialog import font_sample_text
+
 import streamlit as st
-import pandas as pd
+from st_aggrid import AgGrid
+
 from funcoes.movimentacoes.fx_trat_movimentacoes import (
     unificar_extratos_em_df,
     tratar_coluna_data,
@@ -20,7 +23,9 @@ from funcoes.movimentacoes.fx_exib_movimentacoes import (
 from funcoes.pos_atual.fx_df_mov_financeiras import criar_df_mov_financeiras
 from funcoes.pos_atual.fx_df_pos_atual import (
     criar_df_pos_atual,
-    criar_filtro_tipo_df_pos_atual,
+    exibir_df_pos_atual_aggrid,
+    aplicar_filtro_posicao_zerada_df_pos_atual,
+    aplicar_filtro_tipo_df_pos_atual,
     criar_medidas_df_pos_atual,
     exibir_medidas_df_pos_atual
 )
@@ -30,16 +35,54 @@ from funcoes.pos_atual.colunas.col_consolidadas.fx_col_consolidadas_tir import c
 
 
 
-st.title("📊 Minha Carteira - Análise do Extrato de Movimentações da B3")
+st.title("📊 Minha Carteira")
+st.write('##### Análise da carteira de renda variável através do seu Extrato de Movimentações da B3 ')
+st.markdown("---")
 
+# --------------------------------------------------------------------------------------- INSTRUÇÕES E COMENTÁRIOS - 0
+with st.expander("# 📘 Instruções e Comentários sobre a Aplicação", expanded=False):
+
+    # st.markdown("---")
+
+    with st.container(border=True):
+        st.markdown("""
+        Esta aplicação tem como objetivo **analisar automaticamente carteiras de investimentos** compostas por ativos
+         listados na B3 — atualmente, são suportados **Ações, ETFs e Fundos Imobiliários (FIIs)**. Para isso, basta que
+          você carregue seu **arquivo Excel do Extrato de Movimentações** da corretora.
+    
+        🔒 **Seus dados são processados localmente.** Nenhuma informação do extrato é armazenada, garantindo
+         **total privacidade e segurança**.
+    
+        📉 O extrato não informa taxas e impostos (Clearing, Bolsa, Corretagem/Despesas), portanto, os cálculos são
+         realizados com base apenas nos **valores líquidos** das operações.
+    
+        ⚙️ A aplicação foi construída com o objetivo de ser adaptável a diferentes situações. Atualmente, ela já trata
+         eventos como **desdobramentos e atualizações de ticker**. No entanto, por enquanto, ela foi testada apenas
+          com o meu próprio extrato, que inclui operações simples (compras, vendas e recebimento de proventos).
+    
+        🚧 Por isso, **certas movimentações ainda não são reconhecidas**, como:
+        - Bonificações em ativos;
+        - Direitos de subscrição;
+        - Operações com opções;
+        - Aluguel de ações.
+    
+        Se a aplicação apresentar erros, uma boa alternativa é **filtrar seu extrato apenas por FIIs** no momento
+         do download. Isso costuma evitar falhas.
+    
+        📌 A classificação de cada ativo é feita com base em critérios lógicos. Caso algum ativo não seja identificado
+         corretamente, ele será marcado como **“Indefinido”**.  
+    
+        🎯 Cada **seção da aplicação é independente**, e seus **filtros afetam apenas os dados visíveis naquela seção**.
+        """)
 
 # ------------------------------------------------------------------------------------------------- CARREGANDO ARQ - 1
 
 
-with st.expander("📂 Carregamento dos dados", expanded=True): # Comentar e manter apenas para manutenção
+with st.expander("📂 Carregamento dos dados", expanded=False):
+
     st.metric(label="ℹ️", value="", help="""
     # Carregamento dos dados\n
-    Como baixar o Extrato de Movimentações?
+    Baixe seu Extrato de Movimentações:
     - Acesse o site da B3: https://www.b3.com.br/pt_br/para-voce
     - No site da B3, clique em 'Área do Investidor', ou acesse direto: https://www.investidor.b3.com.br/
         - Faça login ou crie seu acesso
@@ -54,9 +97,11 @@ with st.expander("📂 Carregamento dos dados", expanded=True): # Comentar e man
     - E por fim, clique em 'Baixar' e salve o arquivo em seu PC
         """)
 
-    # with st.container(border=True):
+    # st.markdown("---")
+
+    with st.container(border=True):
         # Usuário carregará 1 ou mais arquivos de extrato de movimentação
-    arquivos = st.file_uploader("Carregue aqui o seu Extrato de Movimentações",
+        arquivos = st.file_uploader("Carregue aqui o seu Extrato de Movimentações",
                                     type=["xlsx", "xls"], accept_multiple_files=True)
 
 # ------------------------------------------------------------------------------------------------- CRIANDO DF MOV - 2a
@@ -97,13 +142,21 @@ if arquivos:
     with st.expander("📃 Extrato de Movimentações", expanded=True):
         st.metric(label="ℹ️", value="", help="""
         # Extrato de Movimentações
-        - Aplique filtros na tabela para que os indicadores abaixo se ajustem
+        Clique nos botões ao lado dos títulos de cada coluna e customize a tabela interativa:
+        - Arraste colunas
+        - Reordene os dados conforme a coluna desejada
+        - Aplique filtros em linhas e colunas que os indicares abaixo se ajustarão
         """)
-        # Nesse caso, ao chamar a fx, já é criado e exibido o df aggrid
-        with st.container(border=True):
-            df_mov_filtrado = exibir_df_mov_filtrado(df_movimentacoes)#, tema="balham-dark")
 
-        # Criando colunas dentro do expander ------ Indicadores:
+        # st.markdown("---")
+
+        # Nesse caso, ao chamar a fx, já é criado e exibido o df aggrid
+        # with st.container(border=True):
+        df_mov_filtrado = exibir_df_mov_filtrado(df_movimentacoes)#, tema="balham-dark")
+
+        # st.markdown("---")
+
+        # Criando colunas dentro do expander ------ Indicadores do df_mov:
         col1, col2, col3 = st.columns([1, 1, 1])
 
         with col1:
@@ -131,20 +184,37 @@ if arquivos:
         st.metric(label="ℹ️", value="", help="""
         # Posição Atual
         - Visualize a Posição Atual da Carteira como um todo, ou filtre por ativo
-        - Indicadores, tabela, e gráficos abaixo, serão ajustados pelo filtro
+        - Indicadores, tabela, e gráficos serão ajustados pelo filtro
         """)
 
+        st.markdown("---")
 
         # Criado logo antes do filtro e exibido só após os indicadores
         df_pos_atual = criar_df_pos_atual(df_mov_financeiras)
 
-# ------------------------------------------------------------------------------------ CRIANDO FILTRO DF_POS_ATUAL - 4b
+# ---------------------------------------------------------------------------------- APLICANDO FILTROS DF_POS_ATUAL - 4b
 
-        with st.container(border=True):
-            df_pos_atual = criar_filtro_tipo_df_pos_atual(df_pos_atual)
+        col1, col2, col3 = st.columns([1, 1, 1])
+
+        with col1:
+            with st.container(border=True):
+                df_pos_atual = aplicar_filtro_posicao_zerada_df_pos_atual(df_pos_atual)
+                st.markdown("---")
+                df_pos_atual = aplicar_filtro_tipo_df_pos_atual(df_pos_atual)
 
 
-# -------------------------------------------------------------------------------- INDICADORES/TOTAIS DF_POS_ATUAL - 4c
+
+        with col2:
+            pass
+
+
+
+        with col3:
+            pass
+
+        # st.markdown("---")
+
+        # -------------------------------------------------------------------------------- INDICADORES/TOTAIS DF_POS_ATUAL - 4c
 
         (  # FX retorna todas as variáveis de totais, menor TIR
             qtd_ativos_total_df_pos_atual, # Essa até faz sentido mostrar.
@@ -186,13 +256,19 @@ if arquivos:
             tir_total_df_pos_atual,
         )
 
+        st.markdown("---")
 # ------------------------------------------------------------------------------------------- EXIBINDO DF_POS_ATUAL - 4d
 
-        with st.container(border=True):
-            st.dataframe(df_pos_atual.round(2))
-            # st.dataframe(df_mov_financeiras.round(2))
+        # with st.container(border=True):
+        # st.dataframe(df_pos_atual.round(2))
+
+        exibir_df_pos_atual_aggrid(df_pos_atual)
 
 
+
+# -------------------------------------------------------------------------------- EXIBINDO GRÁFICOS DODF_POS_ATUAL - 5
+
+    st.markdown("---")
 
 
 
@@ -205,17 +281,20 @@ if arquivos:
 
 
 
+
+
+
+
+
 # ************************************************************************************************************
 # próximos passos:
 
 
-
-# VER SE TEM MAIS ALGUM AJUSTE:
-# Talvez um discalmner inicial
-# subir e testar
-
-# imagem do ativo, provavelmnete só com aggrid
-
+# imagem do ativo, provavelmnete só com aggrid, nessa hora ja decidir se será dataframe ou agrid
+# "https://s3-symbol-logo.tradingview.com/vale--big.svg",
+# "https://s3-symbol-logo.tradingview.com/brasileiro-petrobras--big.svg",
+# "https://s3-symbol-logo.tradingview.com/banco-do-brasil--big.svg",
+# "https://s3-symbol-logo.tradingview.com/hashdex--big.svg",
 
 
 
@@ -225,8 +304,3 @@ if arquivos:
 
 
 # -----------------------------
-
-
-
-
-

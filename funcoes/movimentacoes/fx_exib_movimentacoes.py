@@ -73,6 +73,7 @@ def calcular_remuneracoes(df_mov_filtrado):
     st.metric('🪙 Remunerações', f"R$ {total_remuneracoes:,.2f}" # 💰
               .replace(",", "X").replace(".", ",").replace("X", "."),
               help="""
+              Soma dos recebimentos de:
               - Dividendo
               - Juros Sobre Capital Próprio
               - Rendimento"""
