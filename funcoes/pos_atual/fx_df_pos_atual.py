@@ -115,14 +115,14 @@ def exibir_df_pos_atual_aggrid(df_pos_atual):
     # https: // staggrid - examples.streamlit.app / Themes https://www.ag-grid.com/theme-builder/
     custom_theme = (
         StAggridTheme(base="alpine").withParams(
-            chromeBackgroundColor="#1b4332", # BG Título - cinza 333533
+            chromeBackgroundColor="#22333b", # BG Título - cinza 333533
             foregroundColor="#ced4da", # Texto
             # browserColorScheme="dark", # scrool
             fontSize=14,
-            backgroundColor="#2d6a4f", # BG linhas - azul-escuro-cinza 2b2d42 - cinza 202020
+            backgroundColor="#0a0908", # BG linhas - azul-escuro-cinza 2b2d42 - cinza 202020
             # rowBorder=False,
             columnBorder=False,
-            borderColor="#1b4332", # linhas e bordas
+            borderColor="#495057", # linhas e bordas
             headerTextColor="#adb5bd", # Texto Título
         ).withParts("iconSetAlpine")
     )

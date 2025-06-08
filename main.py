@@ -10,7 +10,7 @@ st.set_page_config(layout="wide") # Fiz isso pra tabela não ficar pequena e com
 # Mas dequalquer forma vou deixar um modelo de multipaginss comentado
 menu = st.navigation(
     {
-        '# Título do Menu': [st.Page('paginas/pagina.py', title='- Consolidação Carteira B3')],
+        '# Título do Menu': [st.Page('paginas/pagina.py', title='Invest View')],
 
         # '# 1. Consolidação do Extrato de Movimentações B3': [
         #     st.Page('paginas/movimentacoes/pg_mov_completo.py', title='- Extrato Completo (a+b)'),
